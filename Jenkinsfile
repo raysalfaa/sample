@@ -69,7 +69,7 @@ pipeline {
                     def baseBranch = env.BRANCH_NAME ?: 'unknown'
                     echo "Base branch: ${baseBranch}"
 
-                    ifr(!isPullRequest && baseBranch != 'main') {
+                    if(!isPullRequest && baseBranch != 'main') {
                         echo "Skipping build: Not a PR and not 'main' branch."
                         currentBuild.result = 'SUCCESS'
                         return
