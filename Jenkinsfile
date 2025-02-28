@@ -69,7 +69,7 @@ pipeline {
                     def baseBranch = env.BRANCH_NAME ?: 'unknown'
                     echo "Base branch: ${baseBranch}"
 
-                    ifu (!isPullRequest && baseBranch != 'main') {
+                    if (!isPullRequest && baseBranch != 'main') {
                         echo "Skipping build: Not a PR and not 'main' branch."
                         currentBuild.result = 'SUCCESS'
                         return
@@ -94,7 +94,7 @@ pipeline {
         }
     }
     post {
-        failure {
+        always {
             script {
                 emailext (
 
