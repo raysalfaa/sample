@@ -97,11 +97,11 @@ pipeline {
         failure {
             script {
                 emailext (
-                    emailext (
+
   to: 'av724523@gmail.com',
   subject: 'Build Failed',
   body: 'Your build has failed. Please check the logs.'
-)
+
 
                 )
             }
