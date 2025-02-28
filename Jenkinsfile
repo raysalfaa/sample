@@ -52,6 +52,7 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/raysalfaa/sample.git'
+        RECIPIENTS = 'redeyesinbg@gmail.com'
     }
 
     stages {
@@ -89,6 +90,30 @@ pipeline {
             steps {
                 echo "Performing build steps for branch '${env.BRANCH_NAME}' or PR #${env.GITHUB_PR_NUMBER}"
                 // Insert your build steps here (e.g., compiling, testing)
+            }
+        }
+    }
+    post {
+        failure {
+            script {
+                emailext (
+                    subject: "Jenkins Build Failed: ${env.JOB_NAME}",
+                    body: """
+                    Hi Team,
+
+                    The Jenkins build '${env.JOB_NAME}' has failed due to:
+
+                    - Low Code Quality or Bugs.
+                    - Test Failures.
+                    - Other Build Issues.
+
+                    Please check Jenkins logs for details.
+
+                    Regards,
+                    Jenkins CI
+                    """,
+                    to: "${RECIPIENTS}"
+                )
             }
         }
     }
