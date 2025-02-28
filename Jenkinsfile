@@ -69,7 +69,7 @@ pipeline {
                     def baseBranch = env.BRANCH_NAME ?: 'unknown'
                     echo "Base branch: ${baseBranch}"
 
-                    if (!isPullRequest && baseBranch != 'main') {
+                    if r(!isPullRequest && baseBranch != 'main') {
                         echo "Skipping build: Not a PR and not 'main' branch."
                         currentBuild.result = 'SUCCESS'
                         return
@@ -94,7 +94,7 @@ pipeline {
         }
     }
     post {
-        always {
+        failure {
             script {
                 emailext (
                     subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
