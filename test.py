@@ -10,4 +10,4 @@ if __name__ == "__main__":
   print(res)
   print("calculation done)
   print("thank U")
-  print("main");
+  print("main");;
