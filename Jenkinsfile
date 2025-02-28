@@ -66,11 +66,7 @@ pipeline {
                     """,
                     to: RECIPIENTS
                 )
-            }
-        }
-        always{
-            script{
-                echo "pipelining done"
+                echo "Pipelining done"
             }
         }
     }
