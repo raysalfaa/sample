@@ -17,7 +17,7 @@ pipeline {
                     def sourceBranch = env.CHANGE_BRANCH // Source branch
                     
                     // Check if the target branch is dev, if not, skip the build
-                    if (baseBranch != 'dev') {
+                    if (baseBranch != 'main') {
                         echo "Skipping build: Target branch is not 'dev'. It's '${baseBranch}'."
                         currentBuild.result = 'SUCCESS'
                         return
@@ -36,7 +36,7 @@ pipeline {
             when {
                 expression {
                     // This ensures that the build is triggered only for the 'dev' target branch
-                    return env.CHANGE_TARGET == 'dev'
+                    return env.CHANGE_TARGET == 'main'
                 }
             }
             steps {
