@@ -68,6 +68,11 @@ pipeline {
                 )
             }
         }
+        always{
+            script{
+                echo "pipelining done"
+            }
+        }
     }
 }
 
