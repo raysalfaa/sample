@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/raysalfaa/sample.git'
+        RECIPIENTS = 'redeyesinbg@gmail.com'
     }
 
     stages {
@@ -47,6 +48,25 @@ pipeline {
     }
 
     post {
+        failure {
+            // Send an email when the build fails
+            emailext(
+                subject: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                body: """
+                    The build failed for the project: ${env.JOB_NAME}#${env.BUILD_NUMBER}.
+                    
+                    <h3>Build Details:</h3>
+                    <ul>
+                        <li>Project: ${env.JOB_NAME}</li>
+                        <li>Build: ${env.BUILD_NUMBER}</li>
+                        <li>Cause: ${currentBuild.result}</li>
+                        <li>Branch: ${env.BRANCH_NAME}</li>
+                        <li>Build URL: ${env.BUILD_URL}</li>
+                    </ul>
+                """,
+                to: "${RECIPIENTS}"
+            )
+        }
         always {
             echo "Build completed for PR: ${env.CHANGE_ID}."
         }
