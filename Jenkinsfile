@@ -2,53 +2,47 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'SonarQube'  // This should match the name of the SonarQube server configured in Jenkins
-        SONARQUBE_SCANNER_HOME = tool name: 'sonarscanner', type: 'Tool'  // Make sure this matches the SonarQube Scanner tool name
+        REPO_URL = 'https://github.com/raysalfaa/sample.git'
+        //RECIPIENTS = 'redeyesinbg@gmail.com'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the repository
-                checkout scm
+                script {
+                    // Print clone URL, base branch, and source branch
+                    echo "Cloning repository from: ${REPO_URL}"
+
+                    // GitHub PR info (available in environment variables)
+                    def baseBranch = env.CHANGE_TARGET // Target branch
+                    def sourceBranch = env.CHANGE_BRANCH // Source branch
+                    echo "Base branch: ${baseBranch}"
+                    echo "Source branch: ${sourceBranch}"
+
+                    // Check if the target branch is 'main', if not, skip the build
+                    if (baseBranch != 'main') {
+                        echo "Skipping build: Target branch is not 'main'. It's '${bas1eBranch}'."
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+
+                    // Checkout the repository
+                    checkout scm
+                }
             }
         }
 
         stage('Build') {
-            steps {
-                // Example: Build the application (Python or any other language)
-                script {
-                    // Run your build command, e.g., for Python
-                    sh 'python -m unittest discover'
+            when {
+                expression {
+                    // This ensures that the build is triggered only for the 'main' target branch
+                    return env.CHANGE_TARGET == 'main'
                 }
             }
-        }
-
-        stage('SonarQube Analysis') {
             steps {
-                // Run SonarQube analysis
-                script {
-                    def scannerHome = tool name: 'SonarQube Scanner', type: 'Tool'
-                    withSonarQubeEnv('SonarQube') {
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=my-python-app \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=${SONAR_TOKEN}
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                // Wait for SonarQube analysis to complete and check the Quality Gate
-                script {
-                    waitForQualityGate abortPipeline: true
-                }
+                echo "Performing build steps for pull request..."
+                // Insert your build steps here (e.g., compiling, testing)
             }
         }
     }
-}
+
