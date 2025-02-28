@@ -1,2 +1,2 @@
 # sample
-Revision path 
+Creating a simple python application with different branches. 
