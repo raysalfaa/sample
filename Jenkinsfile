@@ -16,16 +16,15 @@ pipeline {
                     // GitHub PR info (available in environment variables)
                     def baseBranch = env.CHANGE_TARGET // Target branch
                     def sourceBranch = env.CHANGE_BRANCH // Source branch
-                    echo "${baseBranch}"
-                    // Check if the target branch is dev, if not, skip the build
+                    echo "Base branch: ${baseBranch}"
+                    echo "Source branch: ${sourceBranch}"
+
+                    // Check if the target branch is 'main', if not, skip the build
                     if (baseBranch != 'main') {
-                        echo "Skipping build: Target branch is not 'dev'. It's '${ibaseBranch}'."
+                        echo "Skipping build: Target branch is not 'main'. It's '${baseBranch}'."
                         currentBuild.result = 'SUCCESS'
                         return
                     }
-
-                    echo "Base branch: ${baseBranch}"
-                    echo "Source branch: ${sourceBranch}"
 
                     // Checkout the repository
                     checkout scm
@@ -36,7 +35,7 @@ pipeline {
         stage('Build') {
             when {
                 expression {
-                    // This ensures that the build is triggered only for the 'dev' target branch
+                    // This ensures that the build is triggered only for the 'main' target branch
                     return env.CHANGE_TARGET == 'main'
                 }
             }
@@ -60,7 +59,7 @@ pipeline {
                         <li>Project: ${env.JOB_NAME}</li>
                         <li>Build: ${env.BUILD_NUMBER}</li>
                         <li>Cause: ${currentBuild.result}</li>
-                        <li>Branch: ${env.BRANCH_NAME}</li>
+                        <li>Branch: ${env.CHANGE_TARGET}</li>
                         <li>Build URL: ${env.BUILD_URL}</li>
                     </ul>
                 """,
