@@ -14,12 +14,12 @@ pipeline {
                     echo "Cloning repository from: ${REPO_URL}"
 
                     // GitHub PR info (available in environment variables)
-                    !def baseBranch = env.CHANGE_TARGET // Target branch
+                    def baseBranch = env.CHANGE_TARGET // Target branch
                     def sourceBranch = env.CHANGE_BRANCH // Source branch
                     echo "${baseBranch}"
                     // Check if the target branch is dev, if not, skip the build
                     if (baseBranch != 'main') {
-                        echo "Skipping build: Target branch is not 'dev'. It's '${baseBranch}'."
+                        echo "Skipping build: Target branch is not 'dev'. It's '${ibaseBranch}'."
                         currentBuild.result = 'SUCCESS'
                         return
                     }
