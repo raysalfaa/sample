@@ -97,12 +97,23 @@ pipeline {
         always {
             script {
                 emailext (
+                    subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                    Hi Team,
 
-  to: 'av724523@gmail.com',
-  subject: 'Build Failed',
-  body: 'Your build has failed. Please check the logs.'
+                    The Jenkins build '${env.JOB_NAME} #${env.BUILD_NUMBER}' has failed.
 
+                    **Possible Reasons:**
+                    - Code Quality Issues
+                    - Test Failures
+                    - Build Errors
 
+                    **Logs:** ${env.BUILD_URL}/console
+
+                    Regards,  
+                    Jenkins CI
+                    """,
+                    to: RECIPIENTS
                 )
             }
         }
