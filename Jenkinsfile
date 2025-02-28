@@ -14,7 +14,7 @@ pipeline {
                     echo "Cloning repository from: ${REPO_URL}"
 
                     // GitHub PR info (available in environment variables)
-                    def baseBranch = env.CHANGE_TARGET // Target branch
+                    def baseBranch = env.BRANCH_NAME // Target branch
                     def sourceBranch = env.CHANGE_BRANCH // Source branch
                     echo "Base branch: ${baseBranch}"
                     echo "Source branch: ${sourceBranch}"
