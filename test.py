@@ -9,3 +9,4 @@ if __name__ == "__main__":
   res=cal(8,6)
   print(res)
   print("calculation done)
+  print("hello")
