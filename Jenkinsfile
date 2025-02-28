@@ -21,7 +21,7 @@ pipeline {
 
                     // Check if the target branch is 'main', if not, skip the build
                     if (baseBranch != 'main') {
-                        echo "Skipping build: Target branch is not 'main'. It's '${bas1eBranch}'."
+                        echo "Skipping build: Target branch is not 'main'. It's '${baseBranch}'."
                         currentBuild.result = 'SUCCESS'
                         return
                     }
