@@ -97,22 +97,12 @@ pipeline {
         failure {
             script {
                 emailext (
-                    subject: "Jenkins Build Failed: ${env.JOB_NAME}",
-                    body: """
-                    Hi Team,
+                    emailext (
+  to: 'av724523@gmail.com',
+  subject: 'Build Failed',
+  body: 'Your build has failed. Please check the logs.'
+)
 
-                    The Jenkins build '${env.JOB_NAME}' has failed due to:
-
-                    - Low Code Quality or Bugs.
-                    - Test Failures.
-                    - Other Build Issues.
-
-                    Please check Jenkins logs for details.
-
-                    Regards,
-                    Jenkins CI
-                    """,
-                    to: "${RECIPIENTS}"
                 )
             }
         }
